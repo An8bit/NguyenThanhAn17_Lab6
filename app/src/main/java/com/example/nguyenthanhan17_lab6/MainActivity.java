@@ -7,14 +7,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -83,13 +80,16 @@ public class MainActivity extends AppCompatActivity implements InfoAdapter.Liste
     }
 
     @Override
-    public void onClickListener(int pos, Info info) {
+    //hiển thị chi tiết
+    public void onClickListener(Info info) {
         Intent intent = new Intent(MainActivity.this, detiles.class);
-        intent.putExtra("infos",info ); // truyền dữ liệu giữa các activity: truyền dữ liệu vào intent
+        Info info1 = dbHelper.getdetail(info.getId());
+        intent.putExtra("infos",info1 ); // truyền dữ liệu giữa các activity: truyền dữ liệu vào intent
         startActivity(intent);
     }
 
     @Override
+    //chỗ này chỉnh sửa
     public void onEditListener(int pos, Info info) {
         Intent intent = new Intent (MainActivity.this, AddEditContactActivity.class);
         intent.putExtra("flag",2);
@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements InfoAdapter.Liste
     }
 
     @Override
+    //để xóa
     public void onDeleteListener(int pos, Info info) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Information");
@@ -132,8 +133,8 @@ public class MainActivity extends AppCompatActivity implements InfoAdapter.Liste
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.menuSort){
-
-            Collections.sort(infos);
+            infos.clear();
+            infos.addAll(dbHelper.Sort());
             infoAdapter.notifyDataSetChanged();
         }
         if (item.getItemId() == R.id.menuSearch) {

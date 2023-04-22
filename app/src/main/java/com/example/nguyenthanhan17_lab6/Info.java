@@ -13,6 +13,10 @@ public class Info implements Serializable, Comparable<Info> {
     String fname;
     String lname;
 
+    public Info() {
+
+    }
+
     public int getId() {
         return id;
     }

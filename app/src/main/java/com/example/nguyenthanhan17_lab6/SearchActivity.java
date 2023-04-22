@@ -29,6 +29,7 @@ public class SearchActivity extends AppCompatActivity implements InfoAdapter.Lis
     int position;
 
 
+
     ActivityResultLauncher<Intent> mLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -76,20 +77,14 @@ public class SearchActivity extends AppCompatActivity implements InfoAdapter.Lis
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
-               infoAdapter.getFilter().filter(query);
+               //infoAdapter.getFilter().filter(query);
                 return false;
             }
             //
             @Override
             public boolean onQueryTextChange(String newText) {
-                infoAdapter.getFilter().filter(newText);
+               infoAdapter.getFilter().filter(newText);
 
-                //             if(newText.isEmpty()){
-//                    btAddContact.setVisibility(View.VISIBLE);
-//                }else {
-//                    fabAddContact.setVisibility(View.INVISIBLE);
-//                }
                 return false;
             }
         });
@@ -101,9 +96,10 @@ public class SearchActivity extends AppCompatActivity implements InfoAdapter.Lis
 
 
     @Override
-    public void onClickListener(int pos, Info info) {
+    public void onClickListener(Info info) {
         Intent intent = new Intent(SearchActivity.this, detiles.class);
-        intent.putExtra("infos",info ); // truyền dữ liệu giữa các activity: truyền dữ liệu vào intent
+        Info info1 = dbHelper.getdetail(info.getId());
+        intent.putExtra("infos",info1 ); // truyền dữ liệu giữa các activity: truyền dữ liệu vào intent
         startActivity(intent);
     }
 
@@ -130,7 +126,6 @@ public class SearchActivity extends AppCompatActivity implements InfoAdapter.Lis
             infos.addAll(dbHelper.getInfo());
             infoAdapter.notifyDataSetChanged();
             dialogInterface.dismiss();
-
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();

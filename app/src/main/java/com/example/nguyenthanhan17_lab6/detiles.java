@@ -59,30 +59,14 @@ public class detiles extends AppCompatActivity implements InfoAdapter.Listener  
 
 
     }
-    ActivityResultLauncher<Intent> mLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode()==RESULT_OK){
-                        if(result.getData().getIntExtra("flag",0)==1){
-                            Info info = (Info) result.getData().getSerializableExtra("contact");
-                            infoAdapter.addInfo(info);
-                        }else {
-                            Info info=(Info) result.getData().getSerializableExtra("contact");
-                            infoAdapter.editInfo(info,position);
-                        }
-                    }
-                }
-            }
-    );
+
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return super.onSupportNavigateUp();
     }
 
     @Override
-    public void onClickListener(int pos, Info info) {
+    public void onClickListener( Info info) {
 
     }
 

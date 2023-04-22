@@ -4,9 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
-import androidx.recyclerview.widget.RecyclerView;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -121,41 +118,74 @@ public class DBHelper {
     //Select *
     //From *
     //WHERE ID = ?
+    public Info getdetail(int idinfo) {
+        Info info = new Info();
+        db = openDB();
+        String sql = "select * from info where Id == " + idinfo;
+        Cursor cursor = db.rawQuery(sql, null);
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            String fname = cursor.getString(1);
+            String lname = cursor.getString(2);
+            String image = cursor.getString(3);
+            String phone = cursor.getString(4);
+            String email = cursor.getString(5);
+            String birthday = cursor.getString(6);
+             info = new Info(id, fname, lname, image, phone, email, birthday);
+
+        }
+        db.close();
+        return  info;
+    }
 
 
     //SEARCH
     //Select *
     //From *
     //WHERE like
-    public Cursor searchForName(String keyword) {
-        db=openDB();
-
-        String[] projection = {
-                "fname",
-                "lname",
-                "phone",
-                "email"
-        };
-
-        String selection = "name" + " LIKE ?";
-        String[] selectionArgs = {"%" + keyword + "%"};
-
-        Cursor cursor = db.query(
-                "info",
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );db.close();
-
-        return cursor;
+    public ArrayList<Info> Search(String s) {
+        ArrayList<Info> infos = new ArrayList<>();
+        db = openDB();
+        String sql = "select * from info where fname like '%" + s + "%'or lname like'%" + s + "%'";
+        Cursor cursor = db.rawQuery(sql, null);
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            String fname = cursor.getString(1);
+            String lname = cursor.getString(2);
+            String image = cursor.getString(3);
+            String phone = cursor.getString(4);
+            String email = cursor.getString(5);
+            String birthday = cursor.getString(6);
+            Info info = new Info(id, fname, lname, image, phone, email, birthday);
+            infos.add(info);
+        }
+        db.close();
+        return  infos;
     }
+
 
     //SORT
     //SELECT
     //FROM
     //ORDER BY
+    public ArrayList<Info> Sort() {
+        ArrayList<Info> infos = new ArrayList<>();
+        db = openDB();
+        String sql = "select * from info order by Lower(FName) ASC";
+        Cursor cursor = db.rawQuery(sql, null);
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            String fname = cursor.getString(1);
+            String lname = cursor.getString(2);
+            String image = cursor.getString(3);
+            String phone = cursor.getString(4);
+            String email = cursor.getString(5);
+            String birthday = cursor.getString(6);
+            Info info = new Info(id, fname, lname, image, phone, email, birthday);
+            infos.add(info);
+        }
+        db.close();
+        return  infos;
+    }
 
 }

@@ -35,6 +35,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoVH> implem
         this.listener = listener;
         this.infoFilter= infos;
         this.context=context;
+        dbHelper=new DBHelper(context);
     }
 
     @NonNull
@@ -51,9 +52,8 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoVH> implem
        holder.txName.setText(info.getFname()+" "+info.getLname());
         holder.txPhone.setText(info.getPhone());
         holder.txFax.setText(info.getMail());
-
+        String image = info.getImage();
         try {
-            String image = info.getImage();
             InputStream is =context.getAssets().open(image);
             Bitmap bitmap = BitmapFactory.decodeStream(is);
             holder.imgFlag.setImageBitmap(bitmap);
@@ -61,12 +61,10 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoVH> implem
             e.printStackTrace();
         }
 
-
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onClickListener(position,info);
+                listener.onClickListener(info);
             }
         });
         holder.ivEdit.setOnClickListener(new View.OnClickListener() {
@@ -122,15 +120,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoVH> implem
            if(charString.isEmpty()){
                infoFilter=infos;
            }else {
-               List<Info>filteredList=new ArrayList<>();
-               for (Info row : infos){
-                   if (row.getFname().toLowerCase().contains(charString.toLowerCase()) ||
-                           row.getPhone().toLowerCase().contains(charString.toLowerCase()) ||
-                           row.getLname().toLowerCase().contains(charString.toLowerCase())) {
-                       filteredList.add(row);
-                   }
-               }
-               infoFilter = (ArrayList<Info>) filteredList;
+              infoFilter=dbHelper.Search(charString);
            }
            FilterResults filterResults = new FilterResults();
            filterResults.values=infoFilter;
@@ -162,7 +152,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoVH> implem
 
 
     interface Listener {
-        void onClickListener(int pos,Info info);
+        void onClickListener(Info info);
         void  onEditListener(int pos,Info info);
         void  onDeleteListener(int pos,Info info);
 

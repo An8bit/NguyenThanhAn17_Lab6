@@ -123,7 +123,7 @@ public class AddEditContactActivity extends AppCompatActivity {
                     Info info = new Info(new Random().nextInt(9999),
                             edfName.getText().toString(),
                             edlName.getText().toString(),
-                            "",
+                            "ava.jpg",
                             edPhone.getText().toString(),
                             edEmail.getText().toString(),
                             edBirthday.getText().toString());
